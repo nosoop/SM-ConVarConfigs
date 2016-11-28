@@ -6,7 +6,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "0.0.0"
+#define PLUGIN_VERSION "0.1.0"
 public Plugin myinfo = {
 	name = "ConVar Configuration",
 	author = "nosoop",
@@ -57,6 +57,26 @@ void ProcessConVarConfig() {
 				config.GetString("maximum", value, sizeof(value));
 				Config_SetConVarBounds(hCvar, ConVarBound_Upper, value);
 				
+				config.GetString("flags/hidden", value, sizeof(value));
+				if (strlen(value)) {
+					Config_SetConVarFlagState(hCvar, FCVAR_HIDDEN, value);
+				}
+				
+				config.GetString("flags/developmentonly", value, sizeof(value));
+				if (strlen(value)) {
+					Config_SetConVarFlagState(hCvar, FCVAR_DEVELOPMENTONLY, value);
+				}
+				
+				config.GetString("flags/cheat", value, sizeof(value));
+				if (strlen(value)) {
+					Config_SetConVarFlagState(hCvar, FCVAR_CHEAT, value);
+				}
+				
+				config.GetString("flags/notify", value, sizeof(value));
+				if (strlen(value)) {
+					Config_SetConVarFlagState(hCvar, FCVAR_NOTIFY, value);
+				}
+				
 				config.GetString("locked", value, sizeof(value));
 				if (strlen(value)) {
 					Config_LockConVar(hCvar, value);
@@ -97,6 +117,15 @@ void Config_UnlockConVar(ConVar convar) {
 	g_LockedConVars.Remove(convarName);
 	
 	convar.RemoveChangeHook(OnConVarChanged);
+}
+
+void Config_SetConVarFlagState(ConVar convar, int flag, const char[] value) {
+	bool bEnable = StringToInt(value) != 0;
+	if (bEnable) {
+		convar.Flags |= flag;
+	} else {
+		convar.Flags &= ~flag;
+	}
 }
 
 public void OnConVarChanged(ConVar convar, const char[] oldValue, const char[] newValue) {
