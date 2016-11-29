@@ -6,7 +6,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "0.1.0"
+#define PLUGIN_VERSION "0.1.1"
 public Plugin myinfo = {
 	name = "ConVar Configuration",
 	author = "nosoop",
@@ -136,6 +136,6 @@ public void OnConVarChanged(ConVar convar, const char[] oldValue, const char[] n
 	if (g_LockedConVars.GetString(convarName, lockedValue, sizeof(lockedValue))
 			&& !StrEqual(newValue, lockedValue)) {
 		convar.SetString(oldValue);
-		LogError("ConVar %s is locked to value %s", convarName, lockedValue);
+		LogMessage("ConVar '%s' is locked to value %s", convarName, lockedValue);
 	}
 }
