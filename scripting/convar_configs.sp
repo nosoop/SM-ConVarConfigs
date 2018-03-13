@@ -110,15 +110,6 @@ void Config_LockConVar(ConVar convar, const char[] value) {
 	convar.AddChangeHook(OnConVarChanged);
 }
 
-void Config_UnlockConVar(ConVar convar) {
-	char convarName[MAX_CONVAR_NAME_LENGTH];
-	convar.GetName(convarName, sizeof(convarName));
-	
-	g_LockedConVars.Remove(convarName);
-	
-	convar.RemoveChangeHook(OnConVarChanged);
-}
-
 void Config_SetConVarFlagState(ConVar convar, int flag, const char[] value) {
 	bool bEnable = StringToInt(value) != 0;
 	if (bEnable) {
